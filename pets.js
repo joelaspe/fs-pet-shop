@@ -2,24 +2,26 @@
 
 const fs = require('fs')
 
-const jsonFile = './pets.json';
+const JSONFILE = './pets.json';
 const inputs = process.argv;
 
+/** Program must have at least one input */
 if(inputs.length < 3) {
     console.error("Usage: node pets.js [read | create | update | destroy]");
     process.exit(1);
 }
 
+/** Parse the user inputs to determine function to execute ***/
 switch (inputs[2]) {
     case "read": {
-        fs.readFile(jsonFile, readData);
+        fs.readFile(JSONFILE, readData);
         break;
     } case "create": {
         if(inputs.length < 6) {
             console.error('Usage: node pets.js create AGE KIND NAME');
             process.exitCode = 2;
         } else {
-            fs.readFile(jsonFile, writeData);
+            fs.readFile(JSONFILE, writeData);
         }
         break;
     } case "update": {
@@ -27,7 +29,7 @@ switch (inputs[2]) {
             console.error('Usage: node pets.js update INDEX AGE KIND NAME');
             process.exitCode = 3;
         } else {
-            fs.readFile(jsonFile, updateData);
+            fs.readFile(JSONFILE, updateData);
         }
         break;
     } case "destroy": {
@@ -35,7 +37,7 @@ switch (inputs[2]) {
             console.error('Usage: node pets.js destroy INDEX');
             process.exitCode = 4;
         } else {
-            fs.readFile(jsonFile, destroyData);
+            fs.readFile(JSONFILE, destroyData);
         }
         break;
     } default: {
@@ -44,11 +46,10 @@ switch (inputs[2]) {
     }
 }
 
+/** Reads the .json file and displays to the user in the console */
 async function readData(err, data) {
-    
     try {
-        var parsed;     
-        parsed = JSON.parse(data);
+        var parsed = JSON.parse(data);
         if(inputs.length === 4) {
             if(inputs[3] >= parsed.length) {
                 console.error('pets.js read INVALID INDEX');
@@ -68,20 +69,17 @@ async function readData(err, data) {
     }
 }
 
-
+/** used to create a new item to add to the .json file */
 async function writeData(err, data) {
-    
     try {
-        var parsed;
-        parsed = JSON.parse(data);
+        var parsed = JSON.parse(data);
         
         var age = parseInt(inputs[3]);
         var kind = inputs[4];
         var name = inputs[5];
         const newPet = {"age": age, "kind": kind, "name": name}
         parsed.push(newPet);
-        const toJSON = JSON.stringify(parsed);
-        fs.writeFile(jsonFile, toJSON, function(error) {
+        fs.writeFile(JSONFILE, JSON.stringify(parsed), function(error) {
             if(error) {
                 console.error(error);
                 process.exitCode = 6;
@@ -98,10 +96,10 @@ async function writeData(err, data) {
 
 }
 
+/** updates an item from the .json file based on the provided index **/
 async function updateData(err, data) {
     try {
-        var parsed;
-        parsed = JSON.parse(data);
+        var parsed = JSON.parse(data);
         var index = inputs[3];
         var age = parseInt(inputs[4]);
         var kind = inputs[5];
@@ -113,8 +111,7 @@ async function updateData(err, data) {
             return;
         }
         parsed[index] = updatedPet;
-        const toJSON = JSON.stringify(parsed);
-        fs.writeFile(jsonFile, toJSON, function(error) {
+        fs.writeFile(JSONFILE, JSON.stringify(parsed), function(error) {
             if(error) {
                 console.error(error);
                 process.exitCode = 6;
@@ -123,7 +120,6 @@ async function updateData(err, data) {
                 console.log(updatedPet);
             } 
         });
-
     }
     catch {
         console.error(err);
@@ -131,12 +127,10 @@ async function updateData(err, data) {
 
 }
 
-
+/** removes an item from the .json file based on the provided index */
 async function destroyData(err, data) {
-    
     try {
-        var parsed;
-        parsed = JSON.parse(data);
+        var parsed = JSON.parse(data);
         var index = inputs[3];
         if(!(parsed[index])) {
             console.error("pets.js destroy INVALID INDEX");
@@ -145,8 +139,7 @@ async function destroyData(err, data) {
         }
         const deletePet = parsed[index];
         parsed.splice(index, 1);
-        const toJSON = JSON.stringify(parsed);
-        fs.writeFile(jsonFile, toJSON, function(error) {
+        fs.writeFile(JSONFILE, JSON.stringify(parsed), function(error) {
             if(error) {
                 console.error(error);
             } else {
@@ -158,5 +151,4 @@ async function destroyData(err, data) {
     catch {
         console.error(err);
     }
-
 }
