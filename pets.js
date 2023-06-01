@@ -44,32 +44,6 @@ switch (inputs[2]) {
     }
 }
 
-async function destroyData(err, data) {
-    
-    try {
-        var parsed;
-        parsed = JSON.parse(data);
-        var index = inputs[3];
-        if(!(parsed[index])) {
-            console.error("Usage: node pets.js update INVALID INDEX");
-        }
-        const deletePet = parsed[index];
-        parsed.splice(index, 1);
-        const toJSON = JSON.stringify(parsed);
-        fs.writeFile(jsonFile, toJSON, function(error) {
-            if(error) {
-                console.error(error);
-            } else {
-                console.log(deletePet);
-            } 
-        })
-
-    }
-    catch {
-        console.error(err);
-    }
-
-}
 
 async function updateData(err, data) {
     
@@ -82,14 +56,17 @@ async function updateData(err, data) {
         var name = inputs[6];
         var updatedPet = {"age": age, "kind": kind, "name": name};
         if(!(parsed[index])) {
-            console.error("pets.js INVALID INDEX");
-            return -5;
+            console.error("pets.js update INVALID INDEX");
+            process.exitCode = 5;
+            return;
         }
         parsed[index] = updatedPet;
         const toJSON = JSON.stringify(parsed);
         fs.writeFile(jsonFile, toJSON, function(error) {
             if(error) {
                 console.error(error);
+                process.exitCode = 6;
+                return;
             } else {
                 console.log(updatedPet);
             } 
@@ -117,6 +94,8 @@ async function writeData(err, data) {
         fs.writeFile(jsonFile, toJSON, function(error) {
             if(error) {
                 console.error(error);
+                process.exitCode = 6;
+                return;
             } else {
                 console.log(newPet);
             } 
@@ -136,8 +115,9 @@ async function readData(err, data) {
         parsed = JSON.parse(data);
         if(inputs.length === 4) {
             if(inputs[3] >= parsed.length) {
-                console.error('pets.js INVALID INDEX');
-                                return -6;
+                console.error('pets.js read INVALID INDEX');
+                process.exitCode = 5;
+                return;
             } else {
                 console.log(parsed[inputs[3]])
             }
@@ -153,4 +133,31 @@ async function readData(err, data) {
 }
 
 
+async function destroyData(err, data) {
+    
+    try {
+        var parsed;
+        parsed = JSON.parse(data);
+        var index = inputs[3];
+        if(!(parsed[index])) {
+            console.error("pets.js destroy INVALID INDEX");
+            process.exitCode = 5;
+            return;
+        }
+        const deletePet = parsed[index];
+        parsed.splice(index, 1);
+        const toJSON = JSON.stringify(parsed);
+        fs.writeFile(jsonFile, toJSON, function(error) {
+            if(error) {
+                console.error(error);
+            } else {
+                console.log(deletePet);
+            } 
+        })
 
+    }
+    catch {
+        console.error(err);
+    }
+
+}
