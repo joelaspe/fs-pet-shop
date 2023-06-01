@@ -7,7 +7,8 @@ const inputs = process.argv;
 
 if(inputs.length < 3) {
     console.error("Usage: node pets.js [read | create | update | destroy]");
-    return -1;
+    process.exitCode = -1;
+    
 }
 
 
@@ -19,25 +20,28 @@ if(inputs[2] === 'read') {
 if(inputs[2] === 'create') {
     if(inputs.length < 6) {
         console.error('Usage: node pets.js create AGE KIND NAME');
-        return -3;
-    }
+        process.exitCode = -2;
+    } else {
     data = fs.readFile(jsonFile, writeData);
+    }
 }
 
 if(inputs[2] === 'update') {
     if(inputs.length < 7) {
         console.error('Usage: node pets.js update INDEX AGE KIND NAME');
-        return -4;
+        process.exitCode = -3;
+    } else {
+        data = fs.readFile(jsonFile, updateData);
     }
-    data = fs.readFile(jsonFile, updateData);
 }
 
 if(inputs[2] === 'destroy') {
     if(inputs.length < 4) {
         console.error('Usage: node pets.js destroy INDEX');
-        return -5;
+        process.exitCode = -4;
+    } else {
+        data = fs.readFile(jsonFile, destroyData);
     }
-    data = fs.readFile(jsonFile, destroyData);
 }
 
 async function destroyData(err, data) {
@@ -77,6 +81,7 @@ async function updateData(err, data) {
         var updatedPet = {"age": age, "kind": kind, "name": name};
         if(!(parsed[index])) {
             console.error("Usage: node pets.js update INVALID INDEX");
+            return -5;
         }
         parsed[index] = updatedPet;
         const toJSON = JSON.stringify(parsed);
@@ -129,7 +134,7 @@ async function readData(err, data) {
         if(inputs.length === 4) {
             if(inputs[3] >= parsed.length) {
                 console.error('Usage: node pets.js read INDEX');
-                return -2;
+                return -6;
             } else {
                 console.log(parsed[inputs[3]])
             }
