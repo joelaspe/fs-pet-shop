@@ -61,7 +61,6 @@ const server = http.createServer(function(req, res) {
                         res.end('Bad Request'); 
                     } else {
                         parsed.push(parsedBody);
-                        console.log(parsed);
                         fs.writeFile(petsPath, JSON.stringify(parsed), function(err) {
                             if(err) {
                                 console.error(err);
