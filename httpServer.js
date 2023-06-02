@@ -6,8 +6,9 @@ const fs = require('fs');
 const PORT = 8000;
 
 const server = http.createServer(function(req, res) {
-    const index = req.url.slice(6);
-    if(req.method === 'GET' && req.url.includes('/pets')) {
+    const route = req.url.slice(0, 5); //get the first 5 characters of the url, with the goal of checking for /pets, if the string is anything other than that, 404 not found
+    const index = req.url.slice(6); // if an additional route on top of /pets i.e. /pets/0 or /pets/1, get the number that is passed in , and make it our index. Checking for type Number is done inside the GET if statement
+    if(req.method === 'GET' && route === '/pets') {
         const petsPath = path.join(__dirname, 'pets.json');
         fs.readFile(petsPath, 'utf-8', function(err, data) {
             if(err) {
