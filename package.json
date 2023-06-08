@@ -4,7 +4,7 @@
   "description": "A small server app to demonstrate CRUD over an HTTP API",
   "main": "restfulExpressServer.js",
   "scripts": {
-    "server": "nodemon expressServer.js"
+    "server": "nodemon restfulExpressServer.js"
   },
   "nodemonConfig": { "ext": "js, json", "ignore": "pets.json", "delay": "2" },
   "repository": {
