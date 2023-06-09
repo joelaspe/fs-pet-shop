@@ -11,7 +11,7 @@ const PORT = 8000;
 const JSONFILE = 'pets.json'
 
 // GET ALL
-app.get('/pets', async function (req, res) {
+app.get('/pets', async (req, res) => {
     try {
         const result = await client.query('SELECT * FROM pets');
         res.json(result.rows);
@@ -23,7 +23,7 @@ app.get('/pets', async function (req, res) {
     }
 });
 // GET ONE
-app.get('/pets/:id', async function (req, res) {
+app.get('/pets/:id', async (req, res) => {
     const id = req.params.id
     if (isNaN(parseInt(id))) {
         res.status(400).type('text/plain').send('Bad Request');
@@ -48,7 +48,7 @@ app.get('/pets/:id', async function (req, res) {
     }
 });
 // CREATE ONE
-app.post('/pets', async function (req, res) {
+app.post('/pets', async (req, res) => {
     const newPet = req.body;
     console.log(newPet);
     if(isNaN(parseInt(newPet.age)) || newPet['name'] === undefined || newPet['name'] === '' || newPet['kind'] === undefined || newPet['kind'] === '') {
@@ -67,7 +67,7 @@ app.post('/pets', async function (req, res) {
     }
 });
 // DELETE ONE
-app.delete('/pets/:id', async function (req, res) {
+app.delete('/pets/:id', async (req, res) => {
     const id = req.params.id
     if (isNaN(parseInt(id))) {
         res.status(400).type('text/plain').send('Bad Request');
@@ -91,7 +91,7 @@ app.delete('/pets/:id', async function (req, res) {
     }
 });
 // UPDATE ONE
-app.patch('/pets/:id', async function (req, res) {
+app.patch('/pets/:id', async (req, res) => {
     const updatePetInfo = req.body;
     const id = req.params.id
     if (isNaN(parseInt(id))) {
