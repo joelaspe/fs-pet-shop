@@ -1,14 +1,25 @@
+
+
 const express = require('express');
 const app = express()
 app.use(express.json());
+
+const basicAuth = require('./auth.js');
+
+
 // Postgres module
 const { Pool } = require('pg');
 const client = new Pool({
     connectionString: 'postgres://petshopapi:petshopapi@localhost:5432/petshop'
 }); 
 
+
 const PORT = 8000;
 const JSONFILE = 'pets.json'
+
+
+// Authentication middleware before the routes
+app.use(basicAuth);
 
 // GET ALL
 app.get('/pets', async (req, res) => {
