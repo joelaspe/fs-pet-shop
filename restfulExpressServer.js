@@ -1,15 +1,32 @@
-const fs = require('fs')
-const express = require('express')
-const path = require('path')
-const bodyParser = require('body-parser')
+//const fs = require('fs') //TODO: Remove references to fs
+import fs from 'fs';
+
+//const express = require('express')
+import express from 'express';
+//const path = require('path')
+import path from 'path';
+//const bodyParser = require('body-parser')
+import bodyParser from 'body-parser';
 const app = express()
 app.use(express.json());
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+
+
+import pkg from 'pg' 
+const {Pool} = pkg;
+const client = new Pool({
+    connectionString: 'postgres://petshopapi:petshopapi@localhost:5432/petshop'
+});
+
 const PORT = 8000;
 const JSONFILE = 'pets.json'
 
 // GET ALL
-app.get('/pets', function (req, res, next) {
+app.get('/pets', async function (req, res, next) {
+    const result = await client.query('SELECT * FROM pets');
+    console.log(result);
+    res.json(result);
+    /*
     let petsPath = path.join(__dirname, JSONFILE)
     fs.readFile(petsPath, "utf-8", function(err, data) {
         if(err) {
@@ -19,6 +36,7 @@ app.get('/pets', function (req, res, next) {
             res.json(parsed)    
         }
     });
+    */
 });
 // GET ONE
 app.get('/pets/:id', function (req, res, next) {

@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "fs-pet-store",
   "version": "0.1.0",
   "description": "A small server app to demonstrate CRUD over an HTTP API",
@@ -6,7 +7,11 @@
   "scripts": {
     "server": "nodemon restfulExpressServer.js"
   },
-  "nodemonConfig": { "ext": "js, json", "ignore": "pets.json", "delay": "2" },
+  "nodemonConfig": {
+    "ext": "js, json",
+    "ignore": "pets.json",
+    "delay": "2"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gSchool/fs-pet-shop.git"
@@ -26,6 +31,7 @@
   "dependencies": {
     "body-parser": "^1.20.2",
     "express": "^4.18.2",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "pg": "^8.11.0"
   }
 }
