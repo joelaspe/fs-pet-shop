@@ -6,11 +6,6 @@
   "scripts": {
     "server": "nodemon restfulExpressServer.js"
   },
-  "nodemonConfig": {
-    "ext": "js, json",
-    "ignore": "pets.json",
-    "delay": "2"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/gSchool/fs-pet-shop.git"

@@ -18,4 +18,4 @@ const check = (name, pass) => {
     return valid;
 }
 
-module.exports = basicAuth;
+module.exports = basicAuth; //
