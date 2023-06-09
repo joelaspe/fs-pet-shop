@@ -1,12 +1,8 @@
-import fs from 'fs';
-import express from 'express';
-import path from 'path';
-
+const express = require('express');
 const app = express()
 app.use(express.json());
-
-import pkg from 'pg' 
-const {Pool} = pkg;
+// Postgres module
+const { Pool } = require('pg');
 const client = new Pool({
     connectionString: 'postgres://petshopapi:petshopapi@localhost:5432/petshop'
 }); 
