@@ -61,16 +61,16 @@ app.get('/pets/:id', async (req, res) => {
 // CREATE ONE
 app.post('/pets', async (req, res) => {
     const newPet = req.body;
-    console.log(newPet);
     if(isNaN(parseInt(newPet.age)) || newPet['name'] === undefined || newPet['name'] === '' || newPet['kind'] === undefined || newPet['kind'] === '') {
         res.type("text/plain").status(400).send('Bad Request');
         
     } else {
         try {
-            const result = await client.query('INSERT INTO pets (name, age, kind) VALUES ($1, $2, $3)', [newPet.name, newPet.age, newPet.kind]);
-            console.log(result);
-            res.status(200).send(newPet);
-        } catch (error) {
+            const result = await client.query('INSERT INTO pets (name, age, kind) VALUES ($1, $2, $3) RETURNING *', [newPet.name, newPet.age, newPet.kind]);
+            // don't return the id to the client (per the readme)
+            const resultFiltered = { "name": result.rows[0].name, "age": result.rows[0].age, "kind": result.rows[0].kind  };
+            res.status(200).json(resultFiltered);
+            } catch (error) {
             console.error(error.message);
             res.status(500).type('text/plain').send('Internal Server Error');
             console.error('Internal Server Error');
