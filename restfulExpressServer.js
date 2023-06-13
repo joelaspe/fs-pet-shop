@@ -85,12 +85,12 @@ app.delete('/pets/:id', async (req, res) => {
     }
     else {
         try {
-            const deletedPet = await client.query('SELECT name, age, kind FROM pets WHERE id = $1', [id]);
-            const result = await client.query('DELETE FROM pets WHERE id = $1', [id]);
+            const result = await client.query('DELETE FROM pets WHERE id = $1 RETURNING *', [id]);
             if(result.rowCount === 0){
                 res.status(404).type('text/plain').send('Not Found')
             } else {
-                res.status(200).send(deletedPet.rows[0]);
+                const resultFiltered = { "name": result.rows[0].name, "age": result.rows[0].age, "kind": result.rows[0].kind  };
+                res.status(200).send(resultFiltered);
             }
             
         } catch {
